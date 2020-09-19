@@ -45,5 +45,8 @@
   
   ## Demonstration
   
+  [Click here](https://frozen-refuge-34561.herokuapp.com/) to use the application.
+  ![](public/assets/images/index.png)
+  ![](public/assets/images/notes.png)
 
   
