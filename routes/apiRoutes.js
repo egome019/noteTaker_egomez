@@ -13,12 +13,10 @@ module.exports = function(app) {
 
     app.post("/api/notes", function(req, res) {
         notesData = database;
-        console.log(req.body)
         notesData.push(req.body);
         req.body.id = notesData.length;
-        console.log(req.body.id)
         notesData=JSON.stringify(notesData);
-        fs.writeFile(database.toString(), notesData, "utf8", function(err) {
+        fs.writeFile("../db/db.json", notesData, "utf8", function(err) {
             if (err) throw err;
         })
         res.json(JSON.parse(notesData));
@@ -28,8 +26,8 @@ module.exports = function(app) {
     app.delete("/api/notes/:id", function(req, res) {
         notesData = fs.readFileSync(database.toString(), "utf8");
         notesData = JSON.parse(notesData);
-        notesData = notesData.filter(function(newNote){
-            return newNote.id != req.params.id;
+        notesData = notesData.filter(function(note){
+            return note.id != req.params.id;
         });
         notesData = JSON.stringify(notesData);
         fs.writeFile(database.toString(), notesData, "utf8", function(err) {
