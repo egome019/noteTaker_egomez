@@ -8,25 +8,25 @@ module.exports = function(app) {
     let notesData = [];
 
     app.get("/api/notes", function(req, res) {
-        notesData = fs.readFile(database, "utf8")
-        notesData = JSON.parse(notesData);
         res.json(notesData)
     });
 
     app.post("/api/notes", function(req, res) {
-        notesData = fs.readFile(database, "utf8");
-        notesData = JSON.parse(notesData);
-        req.body.id = notesData.length;
+        console.log(req.body)
+
         notesData.push(req.body);
+        req.body.id = notesData.length;
+        console.log(req.body.id)
         notesData=JSON.stringify(notesData);
-        fs.writeFile(database, notesData, "utf8", function(err) {
+        fs.writeFile(database.toString(), notesData, "utf8", function(err) {
             if (err) throw err;
         })
         res.json(JSON.parse(notesData));
+        console.log(notesData)
     });
 
     app.delete("/api/notes/:id", function(req, res) {
-        notesData = fs.readFile(database, "utf8");
+        notesData = fs.readFileSync(database, "utf8");
         notesData = JSON.parse(notesData);
         notesData = notesData.filter(function(newNote){
             return newNote.id != req.params.id;
