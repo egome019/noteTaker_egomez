@@ -5,34 +5,40 @@ const fs = require("fs");
 
 module.exports = function(app) {
 
-    let notesData = [];
+    let allNotesData = [];
 
+    // this is the get method which displays the db.json file
     app.get("/api/notes", function(req, res) {
-        res.json(database)
+        allNotesData = fs.readFileSync("./db/db.json", "utf8");
+        allNotesData = JSON.parse(allNotesData);
+        res.json(allNotesData)
     });
 
+    // this is the post method which adds new notes to the db.json file
     app.post("/api/notes", function(req, res) {
-        notesData = database;
-        notesData.push(req.body);
-        req.body.id = notesData.length;
-        notesData=JSON.stringify(notesData);
-        fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
+        allNotesData = database;
+        req.body.id = allNotesData.length;
+        allNotesData.push(req.body);
+        allNotesData=JSON.stringify(allNotesData);
+        fs.writeFile("./db/db.json", allNotesData, "utf8", function(err) {
             if (err) throw err;
         })
-        res.json(JSON.parse(notesData));
+        res.json(JSON.parse(allNotesData));
         console.log("POSTED!")
     });
 
+    // this is the DELETE method
     app.delete("/api/notes/:id", function(req, res) {
-        notesData = fs.readFileSync("./db/db.json", "utf8");
-        notesData = JSON.parse(notesData);
-        notesData = notesData.filter(function(note){
+        allNotesData = fs.readFileSync("./db/db.json", "utf8");
+        allNotesData = JSON.parse(allNotesData);
+        allNotesData = allNotesData.filter(function(note){
             return note.id != req.params.id;
         });
-        notesData = JSON.stringify(notesData);
-        fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
+        allNotesData = JSON.stringify(allNotesData);
+        fs.writeFile("./db/db.json", allNotesData, "utf8", function(err) {
             if (err) throw err;
         })
-        res.json(notesData);
+        res.json(allNotesData);
+        console.log("DELETED!!")
     })
 }
