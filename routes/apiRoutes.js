@@ -16,21 +16,21 @@ module.exports = function(app) {
         notesData.push(req.body);
         req.body.id = notesData.length;
         notesData=JSON.stringify(notesData);
-        fs.writeFile("../db/db.json", notesData, "utf8", function(err) {
+        fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
             if (err) throw err;
         })
         res.json(JSON.parse(notesData));
-        console.log(notesData)
+        console.log("POSTED!")
     });
 
     app.delete("/api/notes/:id", function(req, res) {
-        notesData = fs.readFileSync(database.toString(), "utf8");
+        notesData = fs.readFileSync("./db/db.json", "utf8");
         notesData = JSON.parse(notesData);
-        notesData = notesData.filter(function(note){
-            return note.id != req.params.id;
+        notesData = notesData.filter(function(newNote){
+            return newNote.id != req.params.id;
         });
         notesData = JSON.stringify(notesData);
-        fs.writeFile(database.toString(), notesData, "utf8", function(err) {
+        fs.writeFile("./db/db.json", notesData, "utf8", function(err) {
             if (err) throw err;
         })
         res.json(notesData);
